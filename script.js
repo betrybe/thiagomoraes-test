@@ -40,4 +40,42 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
-window.onload = () => { };
+function sendRequest(verb, url, query) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        resolve(xhr.response);
+      }
+    };
+
+    xhr.open(`${verb}`, `${url}${query}`);
+    xhr.send();
+  });
+}
+
+function setItemsInContainer(response) {
+  if (response === undefined) return;
+
+  const itemContainer = document.querySelector('.items');
+  const jsonResponse = JSON.parse(response);
+  jsonResponse.results.forEach((item) => {
+    const contract = {
+      sku: item.id,
+      name: item.title,
+      image: item.thumbnail,
+    };
+    itemContainer.appendChild(createProductItemElement(contract));
+  });
+}
+
+function fetchListItems(verb = 'GET', query = 'computador') {
+  const fetch = sendRequest('GET',
+      'https://api.mercadolibre.com/sites/MLB/search',
+      `?q=${query}&sort=id_asc`)
+      .then((response) => setItemsInContainer(response));
+}
+
+window.onload = () => {
+  fetchListItems();
+};

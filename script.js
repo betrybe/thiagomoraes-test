@@ -151,4 +151,9 @@ function addInCart(event) {
 window.onload = () => {
   setItemsInCart();
   fetchListItems();
+
+  document.querySelector('.empty-cart').addEventListener('click', () => {
+    localStorage.removeItem('cart');
+    setItemsInCart();
+  });
 };

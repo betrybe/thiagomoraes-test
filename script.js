@@ -43,6 +43,24 @@ function cartItemClickListener(event) {
   setItemsInCart();
 }
 
+function asyncSum() {
+  const items = localStorage.getItem('cart');
+  const elementTotalPrice = document.querySelector('.total-price');
+
+  if (items === null || items === '' || items === undefined) {
+    elementTotalPrice.textContent = 0;
+    return;
+  }
+
+  const sumPromise = () => new Promise((resolve, reject) => {
+    resolve(JSON.parse(items).reduce((acum, item) => acum + item.salePrice, 0));
+  });
+  sumPromise()
+      .then(function (response) {
+        elementTotalPrice.textContent = response;
+      }).catch((error) => console.log(error));
+}
+
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
@@ -96,6 +114,8 @@ function setItemsInCart() {
   cartItems.forEach((item) => {
     cartDom.appendChild(createCartItemElement(item));
   });
+
+  asyncSum();
 }
 
 function setItemInStorage(response) {

@@ -129,5 +129,6 @@ function addInCart(event) {
 }
 
 window.onload = () => {
+  setItemsInCart();
   fetchListItems();
 };

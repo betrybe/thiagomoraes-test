@@ -93,15 +93,18 @@ function setItemInStorage(response) {
   const getItemsInStorage = localStorage.getItem('cart');
   const itemsInStorage = getItemsInStorage !== null ? JSON.parse(getItemsInStorage) : [];
 
-  itemsInStorage.push({
-    sku: response.id,
-    salePrice: response.price,
-    name: response.title,
-  });
+  const find = itemsInStorage.find((item) => item.sku === response.id);
 
-  localStorage.setItem('cart', JSON.stringify(itemsInStorage));
+  if (!find) {
+    itemsInStorage.push({
+      sku: response.id,
+      salePrice: response.price,
+      name: response.title,
+    });
 
-  setItemsInCart();
+    localStorage.setItem('cart', JSON.stringify(itemsInStorage));
+    setItemsInCart();
+  }
 }
 
 function getItem(item) {

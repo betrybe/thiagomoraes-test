@@ -15,12 +15,12 @@ function createCustomElement(element, className, innerText) {
 function createProductItemElement({ sku, name, image }) {
   const section = document.createElement('section');
   section.className = 'item';
-  const buttonAddCart = createCustomElement('button', 'item__add', ' ');
+  const buttonAddCart = createCustomElement('button', 'item__add', 'Adicionar ao carrinho!');
 
   section.appendChild(createCustomElement('span', 'item__sku', sku));
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
-  section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
+  section.appendChild(buttonAddCart);
   section.appendChild(buttonAddCart);
   buttonAddCart.addEventListener('click', addInCart);
   return section;

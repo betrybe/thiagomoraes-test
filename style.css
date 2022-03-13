@@ -55,3 +55,27 @@
   font-size: 16pt;
   text-align: center;
 }
+
+.cart .section-price {
+  display: flex;
+  justify-content: space-between;
+  height: 3em;
+  align-content: center;
+  font-weight: bolder;
+}
+
+.empty-cart {
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 4em;
+}
+
+.empty-cart::before{
+  content: url("empty-cart.png");
+}
+
+.empty-cart:hover {
+  background-color: #e6ffe6;
+}

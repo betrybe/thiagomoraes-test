@@ -78,6 +78,17 @@ function fetchListItems(verb = 'GET', query = 'computador') {
       .then((response) => setItemsInContainer(response));
 }
 
+function setItemsInCart() {
+  const cartDom = document.querySelector('.cart__items');
+  const itemsInStorage = localStorage.getItem('cart');
+  const cartItems = itemsInStorage !== null ? JSON.parse(itemsInStorage) : [];
+  cartDom.innerHTML = '';
+
+  cartItems.forEach((item) => {
+    cartDom.appendChild(createCartItemElement(item));
+  });
+}
+
 function setItemInStorage(response) {
   const getItemsInStorage = localStorage.getItem('cart');
   const itemsInStorage = getItemsInStorage !== null ? JSON.parse(getItemsInStorage) : [];
@@ -89,6 +100,8 @@ function setItemInStorage(response) {
   });
 
   localStorage.setItem('cart', JSON.stringify(itemsInStorage));
+
+  setItemsInCart();
 }
 
 function getItem(item) {

@@ -132,9 +132,10 @@ describe('Shopping Cart Project', () => {
     });
 
     it('Deverá ser possível remover items do carrinho ao clicar sobre eles mesmo após regarregar a página', () => {
-      addToCart(29);
-      addToCart(31);
-      addToCart(15);
+     addToCart(29);
+     addToCart(31);
+     addToCart(15);
+     addToCart(15);
 
       cy.reload({
         onBeforeLoad(win) {

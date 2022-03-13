@@ -31,7 +31,16 @@ function getSkuFromProductItem(item) {
 }
 
 function cartItemClickListener(event) {
-  // coloque seu código aqui
+  const element = event.target;
+  const skuText = element.textContent.split('|');
+
+  const local = JSON.parse(localStorage.getItem('cart'));
+  const sku = local.find((item) => item.sku === skuText[0].substring(4).trim());
+
+  local.splice(local.indexOf(sku), 1);
+  localStorage.setItem('cart', JSON.stringify(local));
+
+  setItemsInCart();
 }
 
 function createCartItemElement({ sku, name, salePrice }) {

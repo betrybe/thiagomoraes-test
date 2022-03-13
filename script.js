@@ -15,12 +15,14 @@ function createCustomElement(element, className, innerText) {
 function createProductItemElement({ sku, name, image }) {
   const section = document.createElement('section');
   section.className = 'item';
+  const buttonAddCart = createCustomElement('button', 'item__add', ' ');
 
   section.appendChild(createCustomElement('span', 'item__sku', sku));
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
   section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
-
+  section.appendChild(buttonAddCart);
+  buttonAddCart.addEventListener('click', addInCart);
   return section;
 }
 
@@ -33,6 +35,7 @@ function cartItemClickListener(event) {
 }
 
 function createCartItemElement({ sku, name, salePrice }) {
+  console.log(sku)
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
@@ -45,7 +48,7 @@ function sendRequest(verb, url, query) {
     const xhr = new XMLHttpRequest();
     xhr.onreadystatechange = () => {
       if (xhr.readyState === XMLHttpRequest.DONE) {
-        resolve(xhr.response);
+        resolve(JSON.parse(xhr.response));
       }
     };
 
@@ -58,8 +61,8 @@ function setItemsInContainer(response) {
   if (response === undefined) return;
 
   const itemContainer = document.querySelector('.items');
-  const jsonResponse = JSON.parse(response);
-  jsonResponse.results.forEach((item) => {
+
+  response.results.forEach((item) => {
     const contract = {
       sku: item.id,
       name: item.title,
@@ -74,6 +77,30 @@ function fetchListItems(verb = 'GET', query = 'computador') {
       'https://api.mercadolibre.com/sites/MLB/search',
       `?q=${query}&sort=id_asc`)
       .then((response) => setItemsInContainer(response));
+}
+
+function setItemsInCart(response) {
+  const cartDom = document.querySelector('.cart__items');
+  cartDom.innerHTML = '';
+  const contract = {
+    sku: response.id,
+    name: response.title,
+    salePrice: response.price,
+  };
+
+  cartDom.appendChild(createCartItemElement({...contract}));
+}
+
+function getItem(item) {
+  sendRequest('GET',
+      `https://api.mercadolibre.com/items/${item}`,
+      '')
+      .then((response) => console.log(response));
+}
+
+function addInCart(event) {
+  const parent = event.target.parentElement;
+  getItem(getSkuFromProductItem(parent));
 }
 
 window.onload = () => {
